@@ -1,82 +1,20 @@
-% !TEX root = main.tex
-\input{preamble}
+\documentclass{bmstu}
 
 \newtheorem{solution}{Решение}
 
 \begin{document}
 
-    \begin{center}
-        \thispagestyle{empty}
-        
-        % Шапка документа с логотипом
-        \begin{minipage}[t]{0.19\textwidth}
-            \vspace{-15pt}
-            \includegraphics[width=\linewidth]{logo.png}
-        \end{minipage}
-        \hfill
-        \begin{minipage}[t]{0.8\textwidth}
-            \centering
-            \scriptsize
-            \linespread{1.5}\selectfont
-            \textbf{Министерство науки и высшего образования Российской Федерации \\
-            Федеральное государственное автономное образовательное учреждение \\
-            высшего образования \\
-            «Московский государственный технический университет \\
-            им. Н.Э. Баумана \\
-            (национальный исследовательский университет)» \\
-            \vspace{2pt}
-            (МГТУ им.\,Н.Э.\,Баумана)}
-        \end{minipage}
-
-        \vspace{0.4cm}
-        {\rule{\textwidth}{1.2pt}}
-        
-        % Основная информация
-        \vspace{1cm}
-        \begin{flushleft}
-        \large
-        ФАКУЛЬТЕТ: \textbf{ИНФОРМАТИКА И СИСТЕМЫ УПРАВЛЕНИЯ} \\
-        \vspace{0.25cm}
-        КАФЕДРА: \textbf{КОМПЬЮТЕРНЫЕ СИСТЕМЫ И СЕТИ(ИУ6)} \\
-        \vspace{0.25cm}
-        НАПРАВЛЕНИЕ: \textbf{09.03.01 Информатика и вычислительная техника}
-        \end{flushleft}
-
-        \vspace{1.8cm}
-        {\LARGE\bfseries 
-        Лабораторная работа №1\\[6pt]
-        
-        Структуры и методы обработки данных
-        }
-        
-        \vspace{2cm}
-        {
-        \vspace{0.5cm}
-        {\large
-        \textbf{Дисциплина:} \underline{Технология разработки программных систем}}
-
-        \vspace{0.5cm}
-        \textbf{Вариант:} \underline{№11}
-        % Таблица с подписями
-
-        \vspace{3cm}
-        \begin{tabular}{lc@{\hspace{8mm}}ccl}
-        \textbf{Студент} & \underline{\phantom{1}ИУ6-45Б\phantom{1}} & & \underline{\includegraphics[width=0.9cm]{signature} 17 февраля}  & \underline{Н.В. Ионов\phantom{1234}}\\
-                        & (группа) &  & (Подпись, дата) & (И.О. Фамилия) \\[2.25ex]
-                        
-        \textbf{Преподаватель} & &  & \underline{\phantom{Подпись, дата}} & \underline{Е.К. Пугачёв\phantom{123}} \\
-                            & &  & (Подпись, дата) & (И.О. Фамилия) \\
-        \end{tabular}
-
-        \vfill
-        {\rule{\textwidth}{0.6pt}}
-        \vspace{4pt}
-        Москва, 2026
-        }
-    \end{center}
-    \clearpage
+    \makereporttitle
+    {Информатика, искусственный интеллект и системы управления} % Название факультета
+    {Компьютерные системы и сети} % Название кафедры
+    {лабораторной работе №~1} % Название работы (в дат. падеже)
+    {Технология разработки программных систем} % Название курса (необязательный аргумент)
+    {Структуры и методы обработки данных} % Тема работы
+    {11} % Номер варианта (необязательный аргумент)
+    {Ионов~Н.~В./ИУ6-45Б} % Номер группы/ФИО студента (если авторов несколько, их необходимо разделить запятой)
+    {Пугачев~Е.~К.} % ФИО преподавателя
     
-    \section*{Введение}
+    \chapter{Введение}
 
     \underline{\textbf{Цель лабораторной работы:}} исследование структур данных, методов их обработки и оценки.
     \vspace{8pt}
@@ -91,6 +29,7 @@
     
     \begin{table}[H]
         \centering
+        \small
         \begin{tabular}{|r|*{4}{c|}}
             \hline
             Задача & Структура данных & Поиск & Упорядовачиние & Корректировка \\
@@ -109,67 +48,40 @@
     Лабораторная работа будет выполнена на языке \texttt{C}.
     \clearpage
 
-    \section*{Основная часть}
-    \refstepcounter{section} 
+    \chapter{Основная часть} 
 
-    \subsection{Реализация}
+    \section{Реализация}
     Для хранения таблицы будет использоваться статический массив длины $K$.
     Причём элементом этого массива будет запись \texttt{data}.
 
-    \begin{figure}[h]
-        \includegraphics[width=1\textwidth]{vis_const_array}
-        \caption{Реализация хранения таблицы в виде статического массива}
-    \end{figure}
+    \includeimage
+        {vis_const_array} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (с обтеканием)
+        {h} % Положение рисунка (см. wrapfigure из пакета wrapfig)
+        {1\textwidth} % Ширина рисунка
+        {Реализация хранения таблицы в виде статического массива} % Подпись рисунка
 
     Ниже представлен код, который реализует структуру хранения данных.
 
-    \begin{verbatim}
-        #define MAX_LEN_UNIT 5
-        #define MAX_LEN_MATERIAL 8
-        #define MAX_LEN_MEASURE 12 
-        #define MAX_LEN_PRODUCTION 8
-        #define MAX_LEN_E_CON 4
-
-        typedef struct {
-            char unit_code[MAX_LEN_UNIT];
-            char material_code[MAX_LEN_MATERIAL];
-            char measure[MAX_LEN_MEASURE];
-            char production_id[MAX_LEN_PRODUCTION];
-            char expected_consumption[MAX_LEN_E_CON];
-        } data;
-
-        data table[k];
-    \end{verbatim}
-    \begin{center}
-        \captionof{figure}{Реализации структуры \texttt{data} и соответствующей таблицы}
-    \end{center}
-
-    \subsection{Определение объёма данных}
+    \includelisting
+        {def_struct.c}
+        {Реализации структуры \texttt{data} и соответствующей таблицы}
+    
+    \clearpage
+    \section{Определение объёма данных}
 
     \begin{itemize}
         \item Поскольку все поля --- \texttt{char}, структура имеет выравнивание 1.
          Это означает, что её размер равен сумме полей, т.е. 37 байт.
         \item Объем памяти, занимаемой таблицей, содержащим $K$ записей: $K \times 37$ байт.
     \end{itemize}
-    \clearpage
 
-    \subsection{Анализ методов}
-    Сначала рассмотрим алгоритм поиска -- \texttt{вычисление адреса}.
+    \section{Анализ методов}
+    Сначала рассмотрим алгоритм поиска -- \underline{\texttt{вычисление адреса}}.
 
-    \begin{verbatim}
-        int _hash(const char* unit_code, int k) {
-            unsigned long hash = 5381;  
-            int c = 0;
-            while ((c = *unit_code++) && c != '\0') {
-                hash = ((hash << 5) + hash) + c;  
-            }
-            return hash % k;
-        }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Реализации полиномиальной хэш-функции для вычисления адреса}
-    \end{center}
+    \includelisting
+        {hash_func.c}
+        {Реализации полиномиальной хэш-функции для вычисления адреса}
 
     Рассчитаем количество тактов для вычисления адреса.
     Пусть длина \texttt{unit\_code} равна $L$.
@@ -187,7 +99,7 @@
                 T(c = \texttt{*unit\_code++}) = t_{\wedge} + t_{++} + t_{=} = 2 + 1 + 2 = 5 \\
                 T(\texttt{c \&\& c != '$\backslash$0'})_{\text{при } c \neq 0} = t_{+} + t_{\text{переход}} + t_{+} + t_{\&\&} = 2 + 1 + 2 + 1 = 6 \\
                 \text{Итого на проверку условия: } 5 + 6 = 11 \\
-                T(\texttt{hash = ((hash << 5) + hash) + c}) = t_{\rightarrow} + t_{+} + t_{+} + t_{=} = 1 + 2 + 2 + 2 = 7 \\
+                T(\texttt{hash = ((hash << 5) + hash) + c}) = t_{\rightarrow} + t_{+} + t_{+} + t_{=} = \\ = 1 + 2 + 2 + 2 = 7 \\
                 t_{\texttt{iter}} = 18
             \end{gather*}
         \item $ c = 0$
@@ -204,53 +116,22 @@
         T_{\texttt{hash}} = t_{\texttt{iter}}\cdot L + t_{\texttt{last}} + t_{\texttt{init}} + t_{\texttt{return}} \\
         T_{\texttt{hash}} = 18\cdot L + 42
     \end{gather*} 
-    \clearpage
 
-    Рассмотрим алгоритм упорядочивания -- \texttt{пузырьком}.
+    Рассмотрим алгоритм упорядочивания -- \underline{\texttt{пузырьком}}.
 
-    \begin{verbatim}
-        void buble_sort(data table[], int k) {
-            int permutations = -1;
-            while (permutations != 0) {
-                permutations = 0;
-                int i = 0;
-                while (i < k-1) {
-                    if(strcmp(table[i].unit_code, table[i+1].unit_code) > 0){
-                        data tmp = table[i];
-                        table[i] = table[i+1];
-                        table[i+1] = tmp;
-                        permutations = 1;
-                    }
-                ++i; 
-                }
-            }
-        }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Реализации упорядочения записей в таблице методом пузырьком}
-    \end{center}
+    \includelisting
+        {buble_sort.c}
+        {Реализации упорядочения записей в таблице методом пузырьком}
 
     Оценка времени упорядочения структуры определяется формулой 
     \[ C_{\texttt{ср}} = \frac{K \cdot (K - 1)}{2}\]
 
-    Рассмотрим алгоритм корректировки -- \texttt{удаление сдвигом}.
-    \begin{verbatim}
-        int _remove(data table[], int k, int index) {
-            int i = 0;
-            while(index + i < k - 1) {
-                data tmp = table[index + i];
-                table[index+i] = table[index + i + 1];
-                table[index + i + 1] = tmp;
-                i++;
-            }
-            return k-1; 
-        }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Реализации корректировки записей в таблице методом удаление сдвигом}
-    \end{center}
+    Рассмотрим алгоритм корректировки -- \underline{\texttt{удаление сдвигом}}.
+    
+    \includelisting
+        {_remove.c}
+        {Реализации корректировки записей в таблице методом удаление сдвигом}
+
 
     Рассчитаем количество тактов для корректировки.
     \begin{gather*}
@@ -276,10 +157,9 @@
 
     \clearpage
 
-    \section*{Альтернативная часть}
-    \refstepcounter{section}
+    \chapter{Альтернативная часть}
 
-    \subsection{Предлагаемое улучшение}
+    \section{Предлагаемое улучшение}
 
     В качестве альтернативного решения будет использована сбалансированная структура данных -- \texttt{АВЛ-дерево}. 
     Данная структура позволит улучшить временные характеристики основных операций по сравнению с таблицей.
@@ -304,296 +184,198 @@
 
     \textit{В АВЛ-дереве данные всегда хранятся в упорядоченном состоянии благодаря инварианту структуры.}
 
-    \begin{figure}[H]
-        \includegraphics[width=1\textwidth]{vis_tree}
-        \caption{Структура дерева}
-    \end{figure}
+    \includeimage
+        {vis_tree} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {1\textwidth} % Ширина рисунка
+        {Структура дерева} % Подпись рисунка
 
-    \subsection{Структура данных}
+
+    \section{Структура данных}
 
     Для хранения информации о материалах будет использоваться АВЛ-дерево, где ключом является код детали 
-    \texttt{unit\_code}. Предполагается, что данные загружаются из \texttt{.csv} файла динамически.
+    \texttt{unit\_code}. Предполагается, что данные загружаются динамически.
 
     Ниже представлена реализация узла дерева:
 
-    \begin{verbatim}
-    typedef struct node {
-        char unit_code[MAX_LEN_UNIT];     
-        char material_code[MAX_LEN_MATERIAL];
-        char measure[MAX_LEN_MEASURE];
-        char production_id[MAX_LEN_PRODUCTION];
-        char expected_consumption[MAX_LEN_E_CON];
-        int height;                        
-        struct node* left;
-        struct node* right;
-    } node;
+    \includelisting
+        {node_tree.c}
+        {Структура узла АВЛ-дерева}
 
-    node* root = NULL;                     
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Структура узла АВЛ-дерева}
-    \end{center}
-
-    \subsection{Вспомогательные функции}
+    \section{Вспомогательные функции}
 
     Для работы с АВЛ-деревом необходимы следующие вспомогательные функции:
 
-    \begin{verbatim}
-    int height(node* x) {
-        return x ? x->height : -1;
-    }
+    \includelisting
+        {sub_funcs.c}
+        {Функции для работы с высотой узлов}
+    
 
-    int difference_heights(node* x) {
-        return x ? height(x->left) - height(x->right) : 0;
-    }
-
-    void update_height(node* x) {
-        int h_left = height(x->left);
-        int h_right = height(x->right);
-        x->height = (h_left > h_right ? h_left : h_right) + 1;
-    }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Функции для работы с высотой узлов}
-        \label{code:avl_utils}
-    \end{center}
-
-    \subsection{Балансировка дерева}
+    \section{Балансировка дерева}
 
     Для поддержания сбалансированности АВЛ-дерева используются малые и большие повороты:
 
-    \begin{verbatim}
-    node* ll_rotation(node* x) {
-        node* y = x->left;
-        x->left = y->right;
-        y->right = x;
-        
-        update_height(x);
-        update_height(y);
-        return y;
-    }
+    \includelisting
+        {right_rotations.c}
+        {Малый и большой левый поворот}
 
-    node* rr_rotation(node* x) {
-        node* y = x->right;
-        x->right = y->left;
-        y->left = x;
-        
-        update_height(x);
-        update_height(y);
-        return y;
-    }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Функции малых поворотов}
-    \end{center}
+    \includeimage
+        {ll} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.7\textwidth} % Ширина рисунка
+        {Схема малого левого поворота (RR-rotation)} % Подпись рисунка
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.7\textwidth]{rr}
-        \caption{Схема малого правого поворота (LL-rotation)}
-    \end{figure}
+    \includeimage
+        {rl} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {H} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Схема большого левого поворота (RL-rotation)} % Подпись рисунка
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.7\textwidth]{ll}
-        \caption{Схема малого левого поворота (RR-rotation)}
-    \end{figure}
+    
+    \underline{Пояснение левых поворотов, на примере вставки узла}
 
-    \begin{verbatim}
-    node* rl_rotation(node* x) {
-        node* y = x->right;
-        node* z = y->left;
-        
-        x->right = z->left;
-        y->left = z->right;
-        z->left = x;
-        z->right = y;
-        
-        update_height(x);
-        update_height(y);
-        update_height(z);
-        return z;
-    }
+    \includeimage
+        {hint_rr_0} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.7\textwidth} % Ширина рисунка
+        {Пояснение малого левого поворота (RR-rotation)} % Подпись рисунка
 
-    node* lr_rotation(node* x) {
-        node* y = x->left;
-        node* z = y->right;
-        
-        x->left = z->right;
-        y->right = z->left;
-        z->left = y;
-        z->right = x;
-        
-        update_height(x);
-        update_height(y);
-        update_height(z);
-        return z;
-    }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Функции больших поворотов}
-    \end{center}
+    \includeimage
+        {hint_rr_gap} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.7\textwidth} % Ширина рисунка
+        {Пояснение малого левого поворота (RR-rotation)}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{rl}
-        \caption{Схема большого левого поворота (RL-rotation)}
-    \end{figure}
+    \includeimage
+        {hint_rl_0} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {t} % Положение рисунка (см. figure из пакета float)
+        {0.7\textwidth} % Ширина рисунка
+        {Пояснение большого левого поворота (RL-rotation)} % Подпись рисунка
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{lr}
-        \caption{Схема большого правого поворота (LR-rotation)}
-    \end{figure}
+    \includeimage
+        {hint_rl_gap} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {t} % Положение рисунка (см. figure из пакета float)
+        {0.7\textwidth} % Ширина рисунка
+        {Пояснение большого левого поворота (RL-rotation)}
 
-    \subsection{Операции с деревом}
+
+   
+    \clearpage
+    \includelisting
+        {left_rotations.c}
+        {Малый и большой правый поворот}
+
+    \includeimage
+        {rr} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.7\textwidth} % Ширина рисунка
+        {Схема малого правого поворота (LL-rotation)} % Подпись рисунка
+
+    \includeimage
+        {lr} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Схема большого правого поворота (LR-rotation)} % Подпись рисунка
+
+
+    \section{Операции с деревом}
 
     \textbf{Поиск элемента:}
 
-    \begin{verbatim}
-    node* find(node* x, const char* unit_code) {
-        if(x == NULL)
-            return NULL;
-        
-        int cmp = strcmp(unit_code, x->unit_code);
-        
-        if(cmp == 0)
-            return x;
-        
-        if(cmp < 0)
-            return find(x->left, unit_code);
-        else
-            return find(x->right, unit_code);
-    }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Функция поиска узла по коду детали}
-    \end{center}
+    \includelisting
+        {find_node.c}
+        {Функция поиска узла по коду детали}
 
     \textbf{Вставка элемента:}
 
-    \begin{verbatim}
-    node* insert(node* x, node* new_node) {
-        if (x == NULL) {
-            return new_node;
-        }
-        
-        int cmp = strcmp(new_node->unit_code, x->unit_code);
-        
-        if (cmp < 0) {
-            x->left = insert(x->left, new_node);
-        } else if (cmp > 0) {
-            x->right = insert(x->right, new_node);
-        } else {
-            *x = *new_node;  
-            free(new_node);
-            return x;
-        }
-        
-        update_height(x);
-        int balance = difference_heights(x);
-        
-        if (balance > 1 && strcmp(new_node->unit_code,
-         x->left->unit_code) < 0) {
-            return ll_rotation(x);
-        }
-        if (balance < -1 && strcmp(new_node->unit_code,
-         x->right->unit_code) > 0) {
-            return rr_rotation(x);
-        }
-        if (balance > 1 && strcmp(new_node->unit_code,
-         x->left->unit_code) > 0) {
-            x->left = rr_rotation(x->left);
-            return ll_rotation(x);
-        }
-        if (balance < -1 && strcmp(new_node->unit_code,
-         x->right->unit_code) < 0) {
-            x->right = ll_rotation(x->right);
-            return rr_rotation(x);
-        }
-        return x;
-    }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Функция вставки узла в дерево}
-    \end{center}
+    \includelisting
+        {insert_tree.c}
+        {Функция вставки узла в дерево}
+    
+    Рассмотрим пример вставки в АВЛ-дерево, но в качестве ключей будут целые числа.
+    При удаления будет такая же структура узла, для наглядности.
 
+    \includeimage
+        {example_default} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Исходное дерево} % Подпись рисунка
+
+    \includeimage
+        {ex_insertion_0} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение вставки в самобалансирующиеся дерево} % Подпись рисунка
+
+    \includeimage
+        {ex_insertion_1} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение вставки в самобалансирующиеся дерево} % Подпись рисунка
+
+    \includeimage
+        {ex_insertion_2} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение вставки в самобалансирующиеся дерево} % Подпись рисунка
+
+    \includeimage
+        {ex_insertion_gap} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение вставки в самобалансирующиеся дерево} % Подпись рисунка
+
+    \clearpage
     \textbf{Удаление элемента:}
 
-    \begin{verbatim}
-    node* find_min(node* x) {
-        while (x->left != NULL)
-            x = x->left;
-        return x;
-    }
+    \includelisting
+        {remove_node.c}
+        {Функция удаления узла из дерева}
 
-    node* delete(node* x, const char* unit_code) {
-        if (x == NULL)
-            return NULL;
-        
-        int cmp = strcmp(unit_code, x->unit_code);
-        
-        if (cmp < 0) {
-            x->left = delete(x->left, unit_code);
-        } else if (cmp > 0) {
-            x->right = delete(x->right, unit_code);
-        } else {
-            if (x->left == NULL || x->right == NULL) {
-                node* temp = x->left ? x->left : x->right;
-                if (temp == NULL) {
-                    free(x);
-                    return NULL;
-                } else {
-                    *x = *temp;
-                    free(temp);
-                }
-            } else {
-                node* min_right = find_min(x->right);
-                strcpy(x->unit_code, min_right->unit_code);
-                strcpy(x->material_code, min_right->material_code);
-                strcpy(x->measure, min_right->measure);
-                strcpy(x->production_id, min_right->production_id);
-                strcpy(x->expected_consumption, min_right->expected_consumption);
-                x->height = min_right->height;
-                x->right = delete(x->right, min_right->unit_code);
-            }
-        }
-        
-        if (x == NULL)
-            return NULL;
-        
-        update_height(x);
-        int balance = difference_heights(x);
-        
-        if (balance > 1 && difference_heights(x->left) >= 0) {
-            return ll_rotation(x);
-        }
-        if (balance > 1 && difference_heights(x->left) < 0) {
-            x->left = rr_rotation(x->left);
-            return ll_rotation(x);
-        }
-        if (balance < -1 && difference_heights(x->right) <= 0) {
-            return rr_rotation(x);
-        }
-        if (balance < -1 && difference_heights(x->right) > 0) {
-            x->right = ll_rotation(x->right);
-            return rr_rotation(x);
-        }
-        return x;
-    }
-    \end{verbatim}
-    \begin{center}
-        \vspace{-1.5em}
-        \captionof{figure}{Функция удаления узла из дерева}
-    \end{center}
+    \includeimage
+        {ex_remove_0} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение удаления из самобалансирующегося дерева} % Подпись рисунка
+
+    \includeimage
+        {ex_remove_1} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение удаления из самобалансирующегося дерева} % Подпись рисунка
+
+    \includeimage
+        {ex_remove_2} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение удаления из самобалансирующегося дерева} % Подпись рисунка
+
+    \includeimage
+        {ex_remove_gap} % Имя файла без расширения (файл должен быть расположен в директории inc/img/)
+        {f} % Обтекание (без обтекания)
+        {h} % Положение рисунка (см. figure из пакета float)
+        {0.8\textwidth} % Ширина рисунка
+        {Пояснение удаления из самобалансирующегося дерева} % Подпись рисунка
+    
     \clearpage
-    \subsection{Оценка эффективности}
+    \section{Оценка эффективности}
 
     Использование АВЛ-дерева вместо таблицы со статическим массивом даёт следующие преимущества:
 
@@ -612,24 +394,24 @@
 
     Таким образом, АВЛ-дерево является эффективной альтернативой для динамически изменяемых данных с частыми операциями поиска и корректировки.
     \clearpage
-    \section*{Заключение}
-    \refstepcounter{section}
+
+    \chapter{Заключение}
 
     \begin{table}[H]
         \centering
         \small
         \renewcommand{\arraystretch}{1.8}
-        \begin{tabular}{|>{\centering\arraybackslash}p{4cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{3cm}|}
+        \begin{tabular}{|>{\centering\arraybackslash}p{4cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{2.5cm}|>{\centering\arraybackslash}p{3cm}|>{\centering\arraybackslash}p{3.1cm}|}
             \hline
             & \textbf{Структура данных} & \textbf{Алгоритм поиска} & \textbf{Алгоритм упорядочивания} & \textbf{Корректировка} \\
             \hline
             \textbf{Исходный вариант} & Статический массив & Вычисление адреса & Пузырьком & Удаление сдвигом \\
             \cline{2-5}
-            & $37K$ байт & $18L + 42$ & \(\displaystyle \frac{K(K-1)}{2}\) & $13 + 230(K-i-1)$ \\
+            & $37K$ байт & $18L + 42$ тактов & \(\displaystyle \frac{K(K-1)}{2}\)   среднее кол-во перестановок & $13 + 230(K-i-1)$ тактов\\
             \hline
             \textbf{Альтернативный вариант} & АВЛ-дерево & Бинарный поиск & Не требуется & Удаление с балансировкой \\
             \cline{2-5}
-            & $57K$ байт & $O(\log K)$ & \textbf{---} & $O(\log K)$ \\
+            & $57K$ байт & $\approx 1.44\cdot\log_2 K$ сравнений & Постоянно благодаря структуре дерева & $\approx \log_2 K$ операций + повороты \\
             \hline
         \end{tabular}
         \caption{Сравнительный анализ исходного и альтернативного решения}
@@ -639,7 +421,6 @@
     \begin{flushleft}
         \textit{Примечание: $K$ \textbf{—} количество записей, $L$ \textbf{—} длина кода детали, $i$ \textbf{—} индекс удаляемого элемента.}
     \end{flushleft}
-
 
 
 \end{document}
